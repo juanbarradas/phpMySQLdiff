@@ -5,7 +5,7 @@
   <p-confirmDialog />
 
   <p-table [value]="items" [loading]="loading" [lazy]="true" [totalRecords]="total"
-           [paginator]="true" [rows]="20" (onPage)="onPage($event)"
+           [paginator]="true" [rows]="20" (onLazyLoad)="onLazyLoad($event)"
            styleClass="history-table" [rowHover]="true">
 
     <ng-template pTemplate="header">
@@ -69,8 +69,8 @@
   </p-table>
 
   <!-- Detail dialog -->
-  <p-dialog [(visible)]="detailVisible" [modal]="true"
-            [style]="{width:'90vw', maxWidth:'1200px'}"
+  <p-dialog #detailDialog [(visible)]="detailVisible" [modal]="true"
+            [maximizable]="true" [style]="{width:'90vw', maxWidth:'1200px'}"
             header="Detalle de Comparación" [draggable]="false" [resizable]="false">
     @if (detailLoading) {
       <div class="loading-detail">

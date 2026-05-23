@@ -1,4 +1,11 @@
 <?php
+/**
+ * phpMySQLDiff - API de Backend
+ *
+ * Autor: Juan J. Barradas <juanjbarradas@gmail.com>
+ * Repositorio: http://github.com/juanbarradas/
+ */
+
 declare(strict_types=1);
 
 // Evitar salida de errores en el raw HTML/text de PHP que pueda romper la respuesta JSON API 

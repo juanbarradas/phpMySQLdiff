@@ -8,6 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
+  "author": "Juan J. Barradas <juanjbarradas@gmail.com> (http://github.com/juanbarradas/)",
   "private": true,
   "packageManager": "npm@10.9.7",
   "dependencies": {

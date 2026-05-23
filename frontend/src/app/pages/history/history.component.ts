@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { TableModule } from 'primeng/table';
@@ -12,6 +12,7 @@ import { ApiService } from '../../core/services/api.service';
 import { SqlViewerComponent } from '../../shared/components/sql-viewer/sql-viewer.component';
 import { DiffTableComponent } from '../../shared/components/diff-table/diff-table.component';
 import { HistoryItem, HistoryDetail, TableDiff, SimpleObjectDiff } from '../../core/models/schema.model';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-history',
@@ -24,7 +25,9 @@ import { HistoryItem, HistoryDetail, TableDiff, SimpleObjectDiff } from '../../c
   templateUrl: './history.component.html',
   styleUrl: './history.component.scss'
 })
-export class HistoryComponent implements OnInit {
+export class HistoryComponent {
+  @ViewChild('detailDialog') detailDialog!: Dialog;
+
   items: HistoryItem[] = [];
   total = 0;
   loading = true;
@@ -36,16 +39,26 @@ export class HistoryComponent implements OnInit {
   constructor(
     private api: ApiService,
     private msg: MessageService,
-    private confirm: ConfirmationService
+    private confirm: ConfirmationService,
+    private cdr: ChangeDetectorRef
   ) {}
 
-  ngOnInit() { this.load(0); }
+  // ngOnInit removed because onLazyLoad triggers the initial load automatically.
 
   load(offset: number) {
     this.loading = true;
     this.api.getHistory(20, offset).subscribe({
-      next: r => { this.items = r.items; this.total = r.total; this.loading = false; },
-      error: () => { this.loading = false; this.msg.add({ severity: 'error', summary: 'Error al cargar el historial' }); }
+      next: r => { 
+        this.items = r.items; 
+        this.total = r.total; 
+        this.loading = false; 
+        this.cdr.detectChanges();
+      },
+      error: () => { 
+        this.loading = false; 
+        this.msg.add({ severity: 'error', summary: 'Error al cargar el historial' }); 
+        this.cdr.detectChanges();
+      }
     });
   }
 
@@ -53,6 +66,14 @@ export class HistoryComponent implements OnInit {
     this.detailVisible = true;
     this.detail        = null;
     this.detailLoading = true;
+
+    // Asegurar que la ventana se abra maximizada
+    setTimeout(() => {
+      if (this.detailDialog && !(this.detailDialog as any).maximized) {
+        this.detailDialog.maximize();
+      }
+    });
+
     this.api.getHistoryEntry(item.id).subscribe({
       next: d => { this.detail = d; this.detailLoading = false; },
       error: () => { this.detailLoading = false; this.msg.add({ severity: 'error', summary: 'No se pudo cargar el detalle' }); }
@@ -102,5 +123,7 @@ export class HistoryComponent implements OnInit {
     return obj ? Object.values(obj) : [];
   }
 
-  onPage(event: any) { this.load(event.first ?? 0); }
+  onLazyLoad(event: any) { 
+    setTimeout(() => this.load(event.first ?? 0), 0); 
+  }
 }

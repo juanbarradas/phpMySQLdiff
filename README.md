@@ -112,6 +112,12 @@ cp -r build/* /var/www/html/compare/
 | [historial.md](docs/historial.md) | Sistema de historial SQLite |
 | [deploy.md](docs/deploy.md) | Guía de despliegue en producción |
 
+## Autor
+
+**Juan J. Barradas**
+- Email: [juanjbarradas@gmail.com](mailto:juanjbarradas@gmail.com)
+- GitHub: [http://github.com/juanbarradas/](http://github.com/juanbarradas/)
+
 ## Licencia
 
 MIT — libre para uso personal y comercial.
