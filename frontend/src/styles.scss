@@ -197,28 +197,105 @@ html, body {
 }
 
 
-.p-tabview .p-tabview-nav {
-  background: var(--bg-elevated) !important;
-  border-bottom: 1px solid var(--border-color) !important;
+/* ── PrimeNG Tabs (v21) Overrides ─────────────────────────────────────────── */
+p-tabs, .p-tabs {
+  display: flex;
+  flex-direction: column;
 }
-.p-tabview .p-tabview-panels {
+
+.p-tablist {
+  background: var(--bg-elevated) !important;
+  border: 1px solid var(--border-color) !important; /* Outer subtle border */
+  border-radius: var(--radius-md) var(--radius-md) 0 0 !important;
+  display: flex;
+}
+
+.p-tablist-content {
+  border: none !important;
+  flex: 1;
+}
+
+.p-tablist-tab-list {
+  border: none !important;
+  background: transparent !important;
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.p-tab {
+  background: transparent !important;
+  color: var(--text-secondary) !important;
+  border: none !important;
+  border-right: 1px solid var(--border-color) !important; /* subtle separator */
+  border-bottom: 2px solid transparent !important;
+  font-weight: 600 !important;
+  padding: 1rem 1.25rem !important;
+  cursor: pointer;
+  transition: color 0.2s, background 0.2s, border-bottom-color 0.2s !important;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.p-tab:last-child {
+  border-right: none !important;
+}
+
+.p-tab:hover {
+  color: var(--text-primary) !important;
+  background: var(--surface-hover) !important;
+}
+
+.p-tab-active, p-tab[data-p-active="true"] {
+  color: var(--accent) !important;
+  border-bottom-color: var(--accent) !important;
+  background: rgba(88, 166, 255, 0.04) !important;
+}
+
+p-tabpanel, .p-tabpanels {
   background: transparent !important;
   padding: 1.5rem 0 0 !important;
+  border: none !important;
+}
+
+.p-datatable-wrapper {
+  border: 1px solid var(--border-color) !important;
+  border-radius: var(--radius-md) !important;
+  overflow: hidden !important;
 }
 
 .p-datatable .p-datatable-thead > tr > th {
-  background: var(--bg-elevated) !important;
+  background: var(--bg-surface) !important;
   color: var(--text-secondary) !important;
-  font-size: 1rem;
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  border: none !important;
   border-bottom: 1px solid var(--border-color) !important;
+  padding: 0.75rem 1rem !important;
 }
+
 .p-datatable .p-datatable-tbody > tr {
-  background: transparent !important;
+  background: var(--bg-base) !important;
   border-bottom: 1px solid var(--border-color) !important;
   transition: background 0.15s;
-  &:hover { background: var(--surface-hover) !important; }
+}
+
+.p-datatable .p-datatable-tbody > tr:hover { 
+  background: var(--surface-hover) !important; 
+}
+
+.p-datatable .p-datatable-tbody > tr > td {
+  border: none !important;
+  border-bottom: 1px solid var(--border-color) !important;
+  padding: 0.75rem 1rem !important;
+}
+
+.p-datatable .p-datatable-tbody > tr:last-child > td {
+  border-bottom: none !important;
 }
 
 /* ── Utility classes ───────────────────────────────────────────────────────── */

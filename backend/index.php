@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-// Prevent PHP from outputting raw HTML/text errors that break JSON API responses
+// Evitar salida de errores en el raw HTML/text de PHP que pueda romper la respuesta JSON API 
 ini_set('display_errors', '0');
 error_reporting(E_ALL);
 
