@@ -1,0 +1,124 @@
+<div class="history-page">
+  <h1 class="page-title">Historial de Comparaciones</h1>
+  <p class="page-subtitle">Explora y re-examina comparaciones de bases de datos pasadas almacenadas localmente.</p>
+
+  <p-confirmDialog />
+
+  <p-table [value]="items" [loading]="loading" [lazy]="true" [totalRecords]="total"
+           [paginator]="true" [rows]="20" (onPage)="onPage($event)"
+           styleClass="history-table" [rowHover]="true">
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width:60px">#</th>
+        <th>Fecha</th>
+        <th>Origen</th>
+        <th>Destino</th>
+        <th>Cambios</th>
+        <th style="width:140px">Acciones</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-item>
+      <tr>
+        <td class="id-cell">{{ item.id }}</td>
+        <td><span class="date-cell">{{ item.created_at }}</span></td>
+        <td>
+          <span class="db-tag origin">{{ item.origin_host }}</span>
+          <code class="db-name">{{ item.origin_db }}</code>
+        </td>
+        <td>
+          <span class="db-tag dest">{{ item.dest_host }}</span>
+          <code class="db-name">{{ item.dest_db }}</code>
+        </td>
+        <td>
+          <div class="change-badges">
+            @if (item.summary?.total_changes === 0) {
+              <span class="badge-equal">Idéntico</span>
+            } @else {
+              @if (item.summary?.tables?.added)    { <span class="badge-added">+{{ item.summary.tables.added }}t</span> }
+              @if (item.summary?.tables?.removed)  { <span class="badge-removed">−{{ item.summary.tables.removed }}t</span> }
+              @if (item.summary?.tables?.modified) { <span class="badge-modified">~{{ item.summary.tables.modified }}t</span> }
+              <span class="total-changes">{{ item.summary?.total_changes }} total</span>
+            }
+          </div>
+        </td>
+        <td>
+          <div class="action-btns">
+            <p-button icon="pi pi-eye" size="small" severity="info"
+                      pTooltip="Ver detalles" (onClick)="viewDetail(item)" />
+            <p-button icon="pi pi-download" size="small" severity="success"
+                      pTooltip="Descargar script" (onClick)="downloadItemScript(item)" />
+            <p-button icon="pi pi-trash" size="small" severity="danger"
+                      pTooltip="Eliminar" (onClick)="confirmDelete(item)" />
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="6">
+          <div class="empty-history">
+            <i class="pi pi-inbox"></i>
+            <span>No hay historial de comparaciones aún. Ejecuta una comparación para comenzar.</span>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <!-- Detail dialog -->
+  <p-dialog [(visible)]="detailVisible" [modal]="true"
+            [style]="{width:'90vw', maxWidth:'1200px'}"
+            header="Detalle de Comparación" [draggable]="false" [resizable]="false">
+    @if (detailLoading) {
+      <div class="loading-detail">
+        <i class="pi pi-spin pi-spinner"></i> Cargando…
+      </div>
+    } @else if (detail) {
+      <div class="detail-meta">
+        <span><strong>Origen:</strong> {{ detail.origin_host }} / {{ detail.origin_db }}</span>
+        <span><strong>Destino:</strong>   {{ detail.dest_host }} / {{ detail.dest_db }}</span>
+        <span><strong>Fecha:</strong>   {{ detail.created_at }}</span>
+        <span><strong>Cambios:</strong> {{ detail.summary.total_changes }}</span>
+      </div>
+
+      <p-tabs value="dtables">
+        <p-tablist>
+          <p-tab value="dtables">Tablas</p-tab>
+          <p-tab value="dviews">Vistas</p-tab>
+          <p-tab value="dfunctions">Funciones</p-tab>
+          <p-tab value="dprocedures">Procedimientos</p-tab>
+          <p-tab value="dtriggers">Triggers</p-tab>
+          <p-tab value="dscript">Script SQL</p-tab>
+        </p-tablist>
+        <p-tabpanels>
+          <p-tabpanel value="dtables">
+            <app-diff-table [items]="asTableDiffs(detail.diff.tables)" type="table"
+                            emptyMessage="Todas las tablas eran idénticas" />
+          </p-tabpanel>
+          <p-tabpanel value="dviews">
+            <app-diff-table [items]="asSimpleDiffs(detail.diff.views)" type="simple"
+                            emptyMessage="Todas las vistas eran idénticas" />
+          </p-tabpanel>
+          <p-tabpanel value="dfunctions">
+            <app-diff-table [items]="asSimpleDiffs(detail.diff.functions)" type="simple"
+                            emptyMessage="Todas las funciones eran idénticas" />
+          </p-tabpanel>
+          <p-tabpanel value="dprocedures">
+            <app-diff-table [items]="asSimpleDiffs(detail.diff.procedures)" type="simple"
+                            emptyMessage="Todos los procedimientos eran idénticos" />
+          </p-tabpanel>
+          <p-tabpanel value="dtriggers">
+            <app-diff-table [items]="asSimpleDiffs(detail.diff.triggers)" type="simple"
+                            emptyMessage="Todos los triggers eran idénticos" />
+          </p-tabpanel>
+          <p-tabpanel value="dscript">
+            <app-sql-viewer [code]="detail.script" />
+          </p-tabpanel>
+        </p-tabpanels>
+      </p-tabs>
+    }
+  </p-dialog>
+</div>

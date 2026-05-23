@@ -1,0 +1,30 @@
+<p-toast position="top-right" />
+
+<div class="app-shell">
+  <!-- ── Top Nav ──────────────────────────────────────────────────── -->
+  <header class="app-header">
+    <div class="header-brand">
+      <span class="brand-icon">⚡</span>
+      <span class="brand-name"><strong style="color: #f97316;">php</strong><span
+          style="color: white;">MySQL</span><strong>Diff</strong></span>
+    </div>
+    <nav class="header-nav">
+      <a routerLink="/compare" routerLinkActive="active" class="nav-link">
+        <i class="pi pi-code"></i> Comparar
+      </a>
+      <a routerLink="/history" routerLinkActive="active" class="nav-link">
+        <i class="pi pi-history"></i> Historial
+      </a>
+    </nav>
+  </header>
+
+  <!-- ── Page Content ────────────────────────────────────────────── -->
+  <main class="app-content">
+    <router-outlet />
+  </main>
+
+  <!-- ── Footer ─────────────────────────────────────────────────── -->
+  <footer class="app-footer">
+    phpMySQLDiff &mdash; PHP 8.1 · Angular · PrimeNG
+  </footer>
+</div>

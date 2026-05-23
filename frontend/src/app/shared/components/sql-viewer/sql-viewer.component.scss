@@ -1,0 +1,48 @@
+.sql-viewer {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.sql-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 1rem;
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border-color);
+  gap: 0.5rem;
+  flex-wrap: wrap;
+
+  .sql-label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+
+  .toolbar-actions {
+    display: flex;
+    gap: 0.4rem;
+  }
+}
+
+.sql-scroll {
+  max-height: 600px;
+  overflow: auto;
+
+  pre {
+    margin: 0;
+    code {
+      display: block;
+      padding: 1.2rem !important;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1rem;
+      line-height: 1.7;
+      border-radius: 0 !important;
+      background: #0d1117 !important;
+    }
+  }
+}

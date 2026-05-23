@@ -1,0 +1,17 @@
+Options -Indexes
+RewriteEngine On
+
+# Pass all requests through index.php unless it's a real file or directory
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [QSA,L]
+
+# PHP settings (wrapped to prevent 500 Internal Server Error on CGI/FastCGI/FPM)
+<IfModule mod_php.c>
+    php_flag  display_errors   Off
+    php_value post_max_size     16M
+</IfModule>
+<IfModule mod_php7.c>
+    php_flag  display_errors   Off
+    php_value post_max_size     16M
+</IfModule>

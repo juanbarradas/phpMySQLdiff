@@ -1,0 +1,74 @@
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 2.5rem;
+  color: var(--success);
+  font-size: 1rem;
+  background: var(--success-subtle);
+  border-radius: var(--radius-md);
+
+  .pi { font-size: 1.3rem; }
+}
+
+.name-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1rem;
+  color: var(--accent);
+
+  .pi { color: var(--text-muted); font-size: 0.9rem; }
+}
+
+.change-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.25rem 0;
+}
+
+.change-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  font-size: 1rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: var(--radius-sm);
+  background: rgba(255,255,255,0.03);
+
+  .change-type {
+    background: rgba(255,255,255,0.08);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 1rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+
+  .change-name {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-primary);
+  }
+
+  .change-action { font-weight: 600; font-size: 1rem; }
+
+  .change-detail {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-left: auto;
+  }
+
+  .diff-field {
+    font-size: 1rem;
+    em { color: var(--text-muted); font-style: normal; }
+    del { color: var(--removed-color); text-decoration: line-through; margin: 0 3px; }
+    ins { color: var(--added-color); text-decoration: none; margin: 0 3px; }
+  }
+}
+
+.text-muted { color: var(--text-muted); font-size: 1rem; }

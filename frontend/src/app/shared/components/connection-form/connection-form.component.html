@@ -1,0 +1,60 @@
+<div class="conn-card" [class]="colorClass">
+  <div class="conn-header">
+    <i class="pi" [class]="icon"></i>
+    <span class="conn-label">{{ label }}</span>
+    @if (testStatus === 'ok') {
+      <p-tag severity="success" value="Conectado" styleClass="ml-auto" />
+    } @else if (testStatus === 'error') {
+      <p-tag severity="danger" value="Falló" styleClass="ml-auto" />
+    }
+  </div>
+
+  <div class="conn-fields">
+    <div class="field-row">
+      <div class="field grow">
+        <label>Host</label>
+        <input pInputText [(ngModel)]="conn.host" (ngModelChange)="onFieldChange()"
+               placeholder="localhost" id="host-{{colorClass}}" />
+      </div>
+      <div class="field port">
+        <label>Puerto</label>
+        <p-inputNumber [(ngModel)]="conn.port" (ngModelChange)="onFieldChange()"
+                       [min]="1" [max]="65535" [showButtons]="false"
+                       inputId="port-{{colorClass}}" />
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Base de Datos</label>
+      <input pInputText [(ngModel)]="conn.dbname" (ngModelChange)="onFieldChange()"
+             placeholder="my_database" id="db-{{colorClass}}" />
+    </div>
+
+    <div class="field-row">
+      <div class="field grow">
+        <label>Usuario</label>
+        <input pInputText [(ngModel)]="conn.user" (ngModelChange)="onFieldChange()"
+               placeholder="root" id="user-{{colorClass}}" />
+      </div>
+      <div class="field grow">
+        <label>Contraseña</label>
+        <p-password [(ngModel)]="conn.password" (ngModelChange)="onFieldChange()"
+                    [feedback]="false" [toggleMask]="true"
+                    inputId="pass-{{colorClass}}" styleClass="w-full" />
+      </div>
+    </div>
+  </div>
+
+  <div class="conn-footer">
+    <p-button label="Probar Conexión" icon="pi pi-wifi"
+              [severity]="testStatus === 'ok' ? 'success' : 'secondary'"
+              [loading]="testStatus === 'testing'"
+              size="small" (onClick)="triggerTest()" />
+    @if (testStatus === 'ok') {
+      <span class="test-version">MySQL {{ testVersion }}</span>
+    }
+    @if (testStatus === 'error') {
+      <span class="test-error">{{ testMessage }}</span>
+    }
+  </div>
+</div>

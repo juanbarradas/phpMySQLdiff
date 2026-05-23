@@ -1,0 +1,334 @@
+/* ── Google Fonts ──────────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* ── PrimeNG / PrimeIcons ──────────────────────────────────────────────────── */
+@import 'primeicons/primeicons.css';
+@import 'primeflex/primeflex.css';
+
+/* ── highlight.js theme ────────────────────────────────────────────────────── */
+@import 'highlight.js/styles/github-dark.css';
+
+/* ── Design Tokens ─────────────────────────────────────────────────────────── */
+:root {
+  --bg-base:        #0d1117;
+  --bg-surface:     #161b22;
+  --bg-elevated:    #1c2128;
+  --surface-header: rgba(13, 17, 23, 0.85);
+  --surface-hover:  rgba(255,255,255,0.06);
+  --border-color:   rgba(255,255,255,0.18); /* Incrementado de 0.08 para mejor visibilidad */
+
+  --text-primary:   #e6edf3;
+  --text-secondary: #a2abb5; /* Aclarado de #8b949e para mejor contraste */
+  --text-muted:     #808b96; /* Aclarado de #6e7681 para placeholders y texto secundario */
+
+  --accent:         #58a6ff;
+  --accent-subtle:  rgba(88,166,255,0.1);
+  --accent-hover:   #79bcff;
+
+  --success:        #3fb950;
+  --success-subtle: rgba(63,185,80,0.12);
+  --danger:         #f85149;
+  --danger-subtle:  rgba(248,81,73,0.12);
+  --warning:        #d29922;
+  --warning-subtle: rgba(210,153,34,0.12);
+  --info:           #58a6ff;
+  --info-subtle:    rgba(88,166,255,0.1);
+
+  --added-color:    #3fb950;
+  --removed-color:  #f85149;
+  --modified-color: #d29922;
+  --equal-color:    #8b949e;
+
+  --radius-sm:  6px;
+  --radius-md:  10px;
+  --radius-lg:  16px;
+  --shadow-md:  0 4px 20px rgba(0,0,0,0.4);
+}
+
+/* ── Reset / Base ──────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── PrimeNG overrides ─────────────────────────────────────────────────────── */
+.p-inputtext {
+  background: var(--bg-base) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid rgba(255, 255, 255, 0.24) !important; /* Borde más visible */
+  border-radius: var(--radius-sm) !important;
+  padding: 0.55rem 0.75rem !important;
+  font-family: inherit !important;
+  transition: border-color 0.15s, box-shadow 0.15s !important;
+
+  &::placeholder {
+    color: var(--text-muted) !important;
+    opacity: 1 !important;
+  }
+
+  &:hover {
+    border-color: rgba(255, 255, 255, 0.42) !important;
+  }
+
+  &:focus, &.p-focus {
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 0 1px var(--accent) !important;
+    outline: none !important;
+  }
+}
+
+.p-card {
+  background: var(--bg-surface) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+.p-card .p-card-title { color: var(--text-primary); font-weight: 600; }
+/* ── PrimeNG Button Overrides ─────────────────────────────────────────────── */
+.p-button {
+  font-weight: 600 !important;
+  font-family: inherit !important;
+  border-radius: var(--radius-sm) !important;
+  padding: 0.55rem 1.15rem !important;
+  font-size: 0.9rem !important;
+  transition: all 0.15s ease !important;
+  cursor: pointer !important;
+  outline: none !important;
+  
+  /* Primary buttons (blue accent) */
+  background: var(--accent) !important;
+  color: #0d1117 !important; /* High contrast text on light blue */
+  border: 1px solid var(--accent) !important;
+
+  &:hover {
+    background: var(--accent-hover) !important;
+    border-color: var(--accent-hover) !important;
+    box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.25) !important;
+  }
+  
+  &:disabled, &.p-disabled {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    color: var(--text-muted) !important;
+    opacity: 0.6 !important;
+    cursor: not-allowed !important;
+  }
+}
+
+/* Secondary Button Overrides */
+.p-button.p-button-secondary {
+  background: var(--bg-elevated) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid rgba(255, 255, 255, 0.24) !important;
+
+  &:hover {
+    background: var(--bg-surface) !important;
+    border-color: rgba(255, 255, 255, 0.42) !important;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.05) !important;
+  }
+}
+
+/* Success Button Overrides */
+.p-button.p-button-success {
+  background: var(--success) !important;
+  color: #0d1117 !important; /* Dark text for high contrast on bright green */
+  border: 1px solid var(--success) !important;
+
+  &:hover {
+    background: #4cd263 !important;
+    border-color: #4cd263 !important;
+    box-shadow: 0 0 0 3px rgba(63, 185, 80, 0.25) !important;
+  }
+}
+
+/* Danger Button Overrides */
+.p-button.p-button-danger {
+  background: var(--danger) !important;
+  color: #ffffff !important; /* White text for high contrast on red */
+  border: 1px solid var(--danger) !important;
+
+  &:hover {
+    background: #ff6e67 !important;
+    border-color: #ff6e67 !important;
+    box-shadow: 0 0 0 3px rgba(248, 81, 73, 0.25) !important;
+  }
+}
+
+/* Info Button Overrides */
+.p-button.p-button-info {
+  background: #1f6feb !important;
+  color: #ffffff !important;
+  border: 1px solid #1f6feb !important;
+
+  &:hover {
+    background: #388bfd !important;
+    border-color: #388bfd !important;
+    box-shadow: 0 0 0 3px rgba(56, 139, 253, 0.25) !important;
+  }
+}
+
+/* Size small adjustments */
+.p-button.p-button-sm {
+  padding: 0.4rem 0.8rem !important;
+  font-size: 1rem !important;
+}
+
+/* Icon only button adjustments */
+.p-button.p-button-icon-only {
+  padding: 0.5rem !important;
+  width: 2.2rem !important;
+  height: 2.2rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.p-button.p-button-icon-only.p-button-sm {
+  width: 1.8rem !important;
+  height: 1.8rem !important;
+  padding: 0.3rem !important;
+}
+
+
+.p-tabview .p-tabview-nav {
+  background: var(--bg-elevated) !important;
+  border-bottom: 1px solid var(--border-color) !important;
+}
+.p-tabview .p-tabview-panels {
+  background: transparent !important;
+  padding: 1.5rem 0 0 !important;
+}
+
+.p-datatable .p-datatable-thead > tr > th {
+  background: var(--bg-elevated) !important;
+  color: var(--text-secondary) !important;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--border-color) !important;
+}
+.p-datatable .p-datatable-tbody > tr {
+  background: transparent !important;
+  border-bottom: 1px solid var(--border-color) !important;
+  transition: background 0.15s;
+  &:hover { background: var(--surface-hover) !important; }
+}
+
+/* ── Utility classes ───────────────────────────────────────────────────────── */
+.badge-added    { background: var(--success-subtle); color: var(--added-color);    border-radius: 99px; padding: 2px 8px; font-size: 1rem; font-weight: 600; }
+.badge-removed  { background: var(--danger-subtle);  color: var(--removed-color);  border-radius: 99px; padding: 2px 8px; font-size: 1rem; font-weight: 600; }
+.badge-modified { background: var(--warning-subtle); color: var(--modified-color); border-radius: 99px; padding: 2px 8px; font-size: 1rem; font-weight: 600; }
+.badge-equal    { background: rgba(255,255,255,0.05); color: var(--equal-color);   border-radius: 99px; padding: 2px 8px; font-size: 1rem; font-weight: 600; }
+
+.section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.page-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+.page-subtitle {
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+}
+
+/* ── Code block base ───────────────────────────────────────────────────────── */
+pre code.hljs {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 1rem;
+  line-height: 1.6;
+  border-radius: var(--radius-md);
+}
+
+/* ── PrimeNG Dialog / ConfirmDialog Overrides ─────────────────────────────── */
+.p-dialog {
+  background: var(--bg-surface) !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: var(--shadow-md) !important;
+  border-radius: var(--radius-lg) !important;
+  overflow: hidden;
+}
+.p-dialog-header {
+  background: var(--bg-surface) !important;
+  color: var(--text-primary) !important;
+  border-bottom: 1px solid var(--border-color) !important;
+  padding: 1.25rem 1.5rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+.p-dialog-title {
+  font-weight: 600 !important;
+  font-size: 1.15rem !important;
+}
+.p-dialog-content {
+  background: var(--bg-surface) !important;
+  color: var(--text-secondary) !important;
+  padding: 1.5rem !important;
+}
+.p-dialog-footer {
+  background: var(--bg-elevated) !important;
+  border-top: 1px solid var(--border-color) !important;
+  padding: 1rem 1.5rem !important;
+  display: flex !important;
+  justify-content: flex-end !important;
+  gap: 0.75rem !important;
+}
+
+/* ── PrimeNG Toast (Notifications) Overrides ──────────────────────────────── */
+.p-toast {
+  opacity: 1 !important;
+}
+.p-toast-message {
+  background: var(--bg-elevated) !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: var(--shadow-md) !important;
+  border-radius: var(--radius-md) !important;
+  color: var(--text-primary) !important;
+  margin-bottom: 0.75rem !important;
+}
+.p-toast-message-content {
+  background: transparent !important;
+  padding: 1rem !important;
+}
+.p-toast-message-success {
+  border-left: 4px solid var(--success) !important;
+}
+.p-toast-message-info {
+  border-left: 4px solid var(--info) !important;
+}
+.p-toast-message-warn {
+  border-left: 4px solid var(--warning) !important;
+}
+.p-toast-message-error {
+  border-left: 4px solid var(--danger) !important;
+}
+
+/* ── PrimeNG Tooltip Overrides ────────────────────────────────────────────── */
+.p-tooltip-text {
+  background: var(--bg-elevated) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: var(--shadow-md) !important;
+  padding: 0.4rem 0.75rem !important;
+  font-size: 1rem !important;
+  border-radius: var(--radius-sm) !important;
+}
+

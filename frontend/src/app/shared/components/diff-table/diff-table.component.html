@@ -1,0 +1,78 @@
+@if (filtered.length === 0) {
+  <div class="empty-state">
+    <i class="pi pi-check-circle"></i>
+    <span>{{ emptyMessage }}</span>
+  </div>
+} @else {
+  <p-table [value]="filtered" styleClass="diff-ptable" [rowHover]="true"
+           [paginator]="filtered.length > 20" [rows]="20">
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width:40%">Nombre</th>
+        <th style="width:15%">Estado</th>
+        @if (type === 'table') {
+          <th>Cambios</th>
+        } @else {
+          <th>Detalle</th>
+        }
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-item>
+      <tr>
+        <td class="name-cell"><i class="pi pi-table"></i> {{ item.name }}</td>
+        <td>
+          <span [class]="'badge-' + item.status">{{ label(item.status) }}</span>
+        </td>
+        <td>
+          @if (type === 'table' && isTable(item) && item.changes.length) {
+            <p-accordion [multiple]="false">
+              <p-accordion-panel value="0">
+                <p-accordion-header>
+                  {{ item.changes.length }} cambio(s)
+                </p-accordion-header>
+                <p-accordion-content>
+                  <div class="change-list">
+                    @for (c of item.changes; track c.name) {
+                      <div class="change-row">
+                        <i class="pi" [class]="changeIcon(c.action)"
+                           [style.color]="changeColor(c.action)"></i>
+                        <span class="change-type">{{ c.type }}</span>
+                        <code class="change-name">{{ c.name }}</code>
+                        <span class="change-action" [style.color]="changeColor(c.action)">
+                          {{ c.action }}
+                        </span>
+                        @if (c.type === 'column' && c.diff) {
+                          <span class="change-detail">
+                            @for (f of (c.diff | keyvalue); track f.key) {
+                              <span class="diff-field">
+                                <em>{{ f.key }}</em>:
+                                <del>{{ f.value.dest }}</del>→<ins>{{ f.value.orig }}</ins>
+                              </span>
+                            }
+                          </span>
+                        }
+                        @if (c.type === 'option') {
+                          <span class="change-detail">
+                            <del>{{ c.dest_value }}</del>→<ins>{{ c.orig_value }}</ins>
+                          </span>
+                        }
+                      </div>
+                    }
+                  </div>
+                </p-accordion-content>
+              </p-accordion-panel>
+            </p-accordion>
+          } @else if (type === 'simple') {
+            <span class="text-muted">
+              {{ item.status === 'added' ? 'Nuevo objeto' :
+                 item.status === 'removed' ? 'No en origen' : 'Definición cambiada' }}
+            </span>
+          } @else {
+            <span class="text-muted">Sin cambios detallados</span>
+          }
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+}

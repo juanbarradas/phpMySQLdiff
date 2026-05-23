@@ -1,0 +1,157 @@
+<div class="compare-page">
+  <h1 class="page-title">Comparación de Esquemas</h1>
+  <p class="page-subtitle">
+    Conecta a las bases de datos origen y destino para comparar sus estructuras y generar un script de migración.
+  </p>
+
+  <!-- ── Connection panels ──────────────────────────────────────── -->
+  <div class="connections-grid">
+    <app-connection-form
+      label="Base de Datos Origen" icon="pi-database" colorClass="origin"
+      (connectionChanged)="onOriginChanged($event)"
+      (testResult)="onOriginTestResult($event)"
+      (testRequested)="onTestRequested('origin', $event)"
+      (formReady)="onOriginFormReady($event)" />
+
+    <div class="compare-arrow">
+      <i class="pi pi-arrow-right"></i>
+    </div>
+
+    <app-connection-form
+      label="Base de Datos Destino" icon="pi-server" colorClass="dest"
+      (connectionChanged)="onDestChanged($event)"
+      (testResult)="onDestTestResult($event)"
+      (testRequested)="onTestRequested('dest', $event)"
+      (formReady)="onDestFormReady($event)" />
+  </div>
+
+  <!-- ── Compare button ─────────────────────────────────────────── -->
+  <div class="compare-action">
+    <p-button id="btn-compare"
+      label="Comparar Bases de Datos" icon="pi pi-refresh"
+      size="large"
+      [loading]="comparing"
+      [disabled]="!canCompare"
+      (onClick)="compare()" />
+
+    <div class="fk-checkbox-container">
+      <p-checkbox
+        [(ngModel)]="ignoreFks"
+        [binary]="true"
+        inputId="ignore-fks"
+        (onChange)="onIgnoreFksChanged()" />
+      <label for="ignore-fks" class="checkbox-label">
+        Ignorar Llaves Foráneas (SET FOREIGN_KEY_CHECKS = 0)
+      </label>
+    </div>
+
+    @if (comparing) {
+      <div class="progress-wrap">
+        <p-progress-bar mode="indeterminate" styleClass="compare-progress" />
+        <span>Extrayendo y comparando esquemas…</span>
+      </div>
+    }
+  </div>
+
+  <!-- ── Results ────────────────────────────────────────────────── -->
+  @if (result) {
+    <div class="results-section">
+      <p-divider />
+
+      <!-- Summary cards -->
+      <div class="summary-grid">
+        @for (section of ['tables','views','functions','procedures','triggers']; track section) {
+          <div class="summary-card">
+            <div class="summary-title">{{ section | titlecase }}</div>
+            <div class="summary-metrics">
+              <span [class]="summaryClass(getSec(section).added, 'added')">
+                +{{ getSec(section).added }}
+              </span>
+              <span [class]="summaryClass(getSec(section).removed, 'removed')">
+                −{{ getSec(section).removed }}
+              </span>
+              <span [class]="summaryClass(getSec(section).modified, 'modified')">
+                ~{{ getSec(section).modified }}
+              </span>
+            </div>
+            <div class="summary-total">{{ getSec(section).total }} total</div>
+          </div>
+        }
+        <div class="summary-card total-card">
+          <div class="summary-title">Total de Cambios</div>
+          <div class="total-number" [class.zero]="result!.summary.total_changes === 0">
+            {{ result!.summary.total_changes }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Action bar for the script -->
+      @if (result!.summary.total_changes > 0) {
+        <div class="script-action-bar">
+          <div class="action-bar-title">
+            <i class="pi pi-check-circle"></i>
+            <span>¡El Script SQL de Migración está listo!</span>
+          </div>
+          <div class="action-bar-buttons">
+            <p-button label="Descargar SQL" icon="pi pi-download" severity="success" size="small" (onClick)="downloadScript()" />
+            <p-button label="Copiar Script" icon="pi pi-copy" severity="secondary" size="small" (onClick)="copyScript()" />
+            <p-button label="Ver Script" icon="pi pi-code" severity="info" size="small" (onClick)="showScriptDialog = true" />
+          </div>
+        </div>
+      }
+
+      <!-- PrimeNG 21 Tabs -->
+      <p-tabs [(value)]="activeTab">
+        <p-tablist>
+          <p-tab value="tables"><i class="pi pi-table mr-1"></i> Tablas</p-tab>
+          <p-tab value="views"><i class="pi pi-eye mr-1"></i> Vistas</p-tab>
+          <p-tab value="functions"><i class="pi pi-cog mr-1"></i> Funciones</p-tab>
+          <p-tab value="procedures"><i class="pi pi-cog mr-1"></i> Procedimientos</p-tab>
+          <p-tab value="triggers"><i class="pi pi-bolt mr-1"></i> Triggers</p-tab>
+          <p-tab value="script"><i class="pi pi-code mr-1"></i> Script SQL</p-tab>
+        </p-tablist>
+        <p-tabpanels>
+          <p-tabpanel value="tables">
+            <app-diff-table [items]="asTableDiffs(result!.diff.tables)" type="table"
+                            emptyMessage="Todas las tablas son idénticas" />
+          </p-tabpanel>
+          <p-tabpanel value="views">
+            <app-diff-table [items]="asSimpleDiffs(result!.diff.views)" type="simple"
+                            emptyMessage="Todas las vistas son idénticas" />
+          </p-tabpanel>
+          <p-tabpanel value="functions">
+            <app-diff-table [items]="asSimpleDiffs(result!.diff.functions)" type="simple"
+                            emptyMessage="Todas las funciones son idénticas" />
+          </p-tabpanel>
+          <p-tabpanel value="procedures">
+            <app-diff-table [items]="asSimpleDiffs(result!.diff.procedures)" type="simple"
+                            emptyMessage="Todos los procedimientos son idénticos" />
+          </p-tabpanel>
+          <p-tabpanel value="triggers">
+            <app-diff-table [items]="asSimpleDiffs(result!.diff.triggers)" type="simple"
+                            emptyMessage="Todos los triggers son idénticos" />
+          </p-tabpanel>
+          <p-tabpanel value="script">
+            <app-sql-viewer
+              [code]="result!.script"
+              [showExecuteButton]="true"
+              [executing]="executingScript"
+              (executeRequested)="confirmAndExecuteScript()" />
+          </p-tabpanel>
+        </p-tabpanels>
+      </p-tabs>
+    </div>
+  }
+
+  <p-confirmDialog />
+
+  <p-dialog [(visible)]="showScriptDialog" [maximizable]="true" [style]="{width: '90vw', height: '90vh'}" header="Script de Migración" [modal]="true" styleClass="script-dialog">
+    @if (showScriptDialog && result) {
+      <app-sql-viewer
+        [code]="result.script"
+        [showExecuteButton]="true"
+        [executing]="executingScript"
+        (executeRequested)="confirmAndExecuteScript()" />
+    }
+  </p-dialog>
+</div>
