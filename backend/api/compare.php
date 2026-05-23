@@ -74,9 +74,15 @@ $historyId = HistoryManager::save($historyDb, [
 ]);
 
 // ── Return response ───────────────────────────────────────────────────────────
-echo json_encode([
+$jsonResponse = json_encode([
     'history_id' => $historyId,
     'summary'    => $summary,
     'diff'       => $diff,
     'script'     => $script,
-], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_INVALID_UTF8_SUBSTITUTE);
+
+if ($jsonResponse === false) {
+    throw new Exception("Error al codificar la respuesta a JSON: " . json_last_error_msg());
+}
+
+echo $jsonResponse;

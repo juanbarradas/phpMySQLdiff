@@ -5,6 +5,10 @@ declare(strict_types=1);
 ini_set('display_errors', '0');
 error_reporting(E_ALL);
 
+// Aumentar límites para bases de datos grandes
+ini_set('memory_limit', '512M');
+set_time_limit(300);
+
 // ── Load .env_cfg ────────────────────────────────────────────────────────────
 $envFile = __DIR__ . '/.env_cfg';
 if (file_exists($envFile)) {
@@ -36,7 +40,7 @@ foreach (glob(__DIR__ . '/lib/*.php') as $f) {
 
 // ── Router ───────────────────────────────────────────────────────────────────
 $raw  = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$base = rtrim($_ENV['APP_BASE_PATH'] ?? '/compare/compare_php', '/');
+$base = rtrim($_ENV['APP_BASE_PATH'] ?? '/mysqlcompare/compare_php', '/');
 $path = '/' . ltrim(substr($raw, strlen($base)), '/');
 $path = rtrim($path, '/') ?: '/';
 $method = $_SERVER['REQUEST_METHOD'];

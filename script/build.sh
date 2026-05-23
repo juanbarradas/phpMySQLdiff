@@ -47,9 +47,11 @@ echo "[3/4] Copying PHP backend to $BUILD_PHP_DIR..."
 rsync -av --exclude='.gitkeep' \
     "$BACKEND_DIR/" "$BUILD_PHP_DIR/"
 
-# Ensure history directory exists in build (SQLite will be created at runtime)
+# Ensure history directory exists in build and is writable by the web server
 mkdir -p "$BUILD_PHP_DIR/history"
 touch    "$BUILD_PHP_DIR/history/.gitkeep"
+chmod -R 777 "$BUILD_PHP_DIR/history"
+chcon -R -t httpd_sys_rw_content_t "$BUILD_PHP_DIR/history" 2>/dev/null || true
 
 echo "      Backend copy complete."
 
